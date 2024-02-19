@@ -4,7 +4,7 @@
 Set of experiments in typescript aiming to demonstrate persistence concepts.
 
 ## Features
-+ Table Data Gateway PAttern (*DAO*)
++ Table Data Gateway Pattern (*DAO*)
 + Repository Pattern
 + Active Record Pattern
 
@@ -12,7 +12,7 @@ Set of experiments in typescript aiming to demonstrate persistence concepts.
 
 Install with `npm install`.
 
-Create the database with `psql -d app -f create.sql`.
+Create the database with `psql -d example -f create.sql`.
 
 Run the server with `npx nodemon src/main.ts`.
 
