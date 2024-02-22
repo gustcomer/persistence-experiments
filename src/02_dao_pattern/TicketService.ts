@@ -32,5 +32,12 @@ export default class TicketService {
     await connection.$pool.end();
     return ticket;
   }
+  async assignTicket(ticketId: string, assigneeId: string) {
+    const connection = pgp()("postgres://postgres:123456@localhost:5432/example");
+    const [ticketData] = await connection.query("select * from example.ticket where ticket_id = $1", [ticketId]);
+    if (ticketData.status === "closed") throw new Error("The ticket is closed");
+    await connection.query("update example.ticket set status = $1, assignee_id = $2 where ticket_id = $3", ["assigned", assigneeId, ticketId]);
+    await connection.$pool.end();
+  }
 
 }
