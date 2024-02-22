@@ -16,19 +16,7 @@ app.post("/tickets", async function (req, res) {
 });
 
 app.get("/tickets/:ticketId", async function (req, res) {
-	const connection = pgp()("postgres://postgres:123456@localhost:5432/example");
-	const [ticketData] = await connection.query("select * from example.ticket where ticket_id = $1", [req.params.ticketId]);
-	const ticket = {
-		ticketId: ticketData.ticket_id,
-		requesterId: ticketData.requester_id,
-		assigneeId: ticketData.assignee_id,
-		startDate: ticketData.start_date,
-		endDate: ticketData.end_date,
-		content: ticketData.content,
-		status: ticketData.status,
-		duration: ticketData.duration
-	}
-	await connection.$pool.end();
+	const ticket = await ticketService.getTicket(req.params.ticketId)
 	res.json(ticket);
 });
 

@@ -16,4 +16,21 @@ export default class TicketService {
     return ticketId;
   }
 
+  async getTicket(ticketId: string) {
+    const connection = pgp()("postgres://postgres:123456@localhost:5432/example");
+    const [ticketData] = await connection.query("select * from example.ticket where ticket_id = $1", [ticketId]);
+    const ticket = {
+      ticketId: ticketData.ticket_id,
+      requesterId: ticketData.requester_id,
+      assigneeId: ticketData.assignee_id,
+      startDate: ticketData.start_date,
+      endDate: ticketData.end_date,
+      content: ticketData.content,
+      status: ticketData.status,
+      duration: ticketData.duration
+    }
+    await connection.$pool.end();
+    return ticket;
+  }
+
 }
