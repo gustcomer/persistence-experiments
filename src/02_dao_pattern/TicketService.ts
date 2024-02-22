@@ -32,6 +32,7 @@ export default class TicketService {
     await connection.$pool.end();
     return ticket;
   }
+
   async assignTicket(ticketId: string, assigneeId: string) {
     const connection = pgp()("postgres://postgres:123456@localhost:5432/example");
     const [ticketData] = await connection.query("select * from example.ticket where ticket_id = $1", [ticketId]);
@@ -40,4 +41,14 @@ export default class TicketService {
     await connection.$pool.end();
   }
 
+  async closeTicket(ticketId: string) {
+    const connection = pgp()("postgres://postgres:123456@localhost:5432/example");
+    const [ticketData] = await connection.query("select * from example.ticket where ticket_id = $1", [ticketId]);
+    if (ticketData.status === "open") throw new Error("The ticket is not assigned");
+    const endDate = new Date();
+    const startDate = ticketData.start_date;
+    const duration = endDate.getTime() - startDate.getTime();
+    await connection.query("update example.ticket set status = $1, end_date = $2, duration = $3 where ticket_id = $4", ["closed", endDate, duration, ticketId]);
+    await connection.$pool.end();
+  }
 }

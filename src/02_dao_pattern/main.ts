@@ -25,4 +25,9 @@ app.post("/tickets/:ticketId/assign", async function(req, res) {
 	res.end();
 });
 
+app.post("/tickets/:ticketId/close", async function(req, res) {
+	await ticketService.closeTicket(req.params.ticketId)
+	res.end();
+});
+
 app.listen(3000);
